@@ -1,0 +1,101 @@
+{% extends "partials/base.html" %}
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated and user.is_staff and user.is_superuser %}
+{% include "partials/topnav.html" %}
+    <!--Graphs-->
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-md-6">
+                <div class="bg-white">
+                    <canvas id="myChart1" width="400" height="300"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-white">
+                    <canvas id="myChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Graphs-->
+{% else %} 
+{% include 'dashboard/staff_index.html' %}   
+{% endif %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx1 = document.getElementById('myChart1').getContext('2d');
+      const chart1 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Evolución Tipo de cambio (Compra)',
+            data: [],
+            pointRadius: 5,
+            pointBackgroundColor: 'green',
+            borderColor: 'green',
+            borderWidth: 1,
+            backgroundColor: 'green',
+            fill: false,
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              suggestedMin: 3.82,
+              suggestedMax: 3.87
+            }
+          }
+        }
+      });
+    
+      const ctx2 = document.getElementById('myChart').getContext('2d');
+      const chart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Evolución Tipo de cambio (Venta)',
+            data: [],
+            pointRadius: 5,
+            pointBackgroundColor: 'orange',
+            borderColor: 'orange',
+            borderWidth: 1,
+            fill: false,
+            backgroundColor: 'orange'
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              suggestedMin: 3.82,
+              suggestedMax: 3.87
+            }
+          }
+        }
+      });
+    
+      function updateChart() {
+        fetch('/data')
+          .then(response => response.json())
+          .then(data => {
+            chart1.data.labels = data.labels;
+            chart1.data.datasets[0].data = data.data_compra;
+            chart1.update();
+            chart2.data.labels = data.labels;
+            chart2.data.datasets[0].data = data.data_venta;
+            chart2.update();
+          });
+      }
+    
+      setInterval(updateChart, 1000); // update every 10 seconds
+    });
+    </script>
+{% endblock %}
+{% endblock %}

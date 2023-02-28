@@ -1,0 +1,64 @@
+<!--Topside-->
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    SISTEMA
+                </div>
+                <div class="card-body">
+                    <marquee behavior="" direction="">
+                        <h3 class="my-4">WIÑAY SISTEMA DE ENVÍO DEL TIPO DE CAMBIO DIRECTO AL WHATSAPP</h3>
+                    </marquee>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    Estadísticas
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a class="text-decoration-none text-dark" href="{% url 'dashboard-staff' %}">
+                                <div class="card my-card shadow text-center p-3">
+                                    <h4>Usuarios <i class="fas fa-users"></i></h4>
+                                    <h3>{{ workers_count }}</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <!--
+                        <div class="col-md-4">
+                            <a class="text-decoration-none text-dark" href="{% url 'dashboard-product' %}">
+                                <div class="card my-card shadow text-center p-3">
+                                    <h4>Products <i class="fas fa-box"></i></h4>
+                                    <h3>{{ product_count }}</h3>
+                                </div>
+                            </a>
+                        </div>
+                        -->
+                        <div class="col-md-6">
+                            <a class="text-decoration-none text-dark" href="{% url 'dashboard-order-paginated' %}">
+                                <div class="card my-card shadow text-center p-3">
+                                    <h4>Historico TC. <i class="fas fa-exclamation-triangle"></i></h4>
+                                    <h3 id="orders-count">{{ orders_count }}</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    setInterval(function() {
+      fetch('{% url "dashboard-order-count" %}')
+        .then(response => response.json())
+        .then(data => {
+          document.querySelector('#orders-count').textContent = data.count;
+        });
+    }, 1000);  // update every 
+  </script>
+<!--End Topside-->

@@ -1,0 +1,75 @@
+{% extends "partials/base.html" %}
+
+{% block title %}order Page{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include "partials/topnav.html" %}
+
+<!--Table-->
+<div class="container">
+    <div class="row my-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    ¿Quieres recibir las alertas por WhatsApp?
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input class="btn bg-success btn-block" type="submit" value="SOLICITAR">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <table class="table bg-white">
+                <thead class="bg-info">
+                    <tr class="text-white">
+                        <th scope="col"> Fecha </th>
+                        <th scope="col">TC - Compra</th>
+                        <th scope="col">TC - Venta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in page_obj %}
+                        <tr>
+                            <td>{{ order.date }}</td>
+                            <td>{{ order.tc_compra }}</td>
+                            <td>{{ order.tc_venta }}</td>
+                        </tr>
+                    {% endfor %}             
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">&lsaquo; previous</a>
+                    {% endif %}
+    
+                    <span class="current-page">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next &rsaquo;</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- <script>
+    function r(){
+        location.reload()
+    }
+    setTimeout(r, 20000);
+</script> -->
+<!--End Table-->
+{% endblock %}
+

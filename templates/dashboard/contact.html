@@ -1,0 +1,30 @@
+% extends "partials/base.html" %}
+{% block title %}order Page{% endblock %}
+{% include "partials/topnav.html" %}
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+
+
+    <h2>Contacto</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+    </form>
+    <form app_name = 'contact'>
+        {% csrf_token %}
+        {{ form|crispy }}
+    </form>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Enviar">
+      </form>
+      
+      <a href="https://api.whatsapp.com/send?phone=NUMERO_DE_TELEFONO&text={{ form.data.mensaje }}">Enviar a WhatsApp</a>
+{% endblock %}
+
